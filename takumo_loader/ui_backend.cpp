@@ -205,7 +205,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         if (MousePos.y < 25 && MousePos.x < GuiSettings::WindowWidth - 25)
         {
             LRESULT hit = DefWindowProc(hWnd, msg, wParam, lParam);
-            // if (hit == HTCLIENT) hit = HTCAPTION;
+            if (hit == HTCLIENT) hit = HTCAPTION;
             return hit;
         }
         else break;

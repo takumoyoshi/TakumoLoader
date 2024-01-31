@@ -11,6 +11,11 @@ static IDXGISwapChain*          g_pSwapChain = nullptr;
 static UINT                     g_ResizeWidth = 0, g_ResizeHeight = 0;
 static ID3D11RenderTargetView*  g_mainRenderTargetView = nullptr;
 
+bool drag = false;
+bool lmb_down = false;
+double last_mouse_clicked_x = 0.0f;
+double last_mouse_clicked_y = 0.0f;
+
 bool CreateDeviceD3D(HWND hWnd);
 void CleanupDeviceD3D();
 void CreateRenderTarget();
@@ -31,7 +36,13 @@ int RenderUi()
 
     WNDCLASSEXW wc = { sizeof(wc), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, GuiSettings::AppName, nullptr };
     ::RegisterClassExW(&wc);
-    hwnd = ::CreateWindowW(wc.lpszClassName, GuiSettings::AppName, WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME, (DesktopRes.right / 2) - (GuiSettings::WindowWidth / 2), DesktopRes.bottom / 2 - (GuiSettings::WindowHeight / 2), GuiSettings::WindowWidth, GuiSettings::WindowHeight, nullptr, nullptr, wc.hInstance, nullptr);
+    hwnd = ::CreateWindowW(wc.lpszClassName, GuiSettings::AppName, WS_POPUP | CW_USEDEFAULT, (DesktopRes.right / 2) - (GuiSettings::WindowWidth / 2), DesktopRes.bottom / 2 - (GuiSettings::WindowHeight / 2), GuiSettings::WindowWidth, GuiSettings::WindowHeight, nullptr, nullptr, wc.hInstance, nullptr);
+    
+    SetWindowLongA(hwnd, GWL_EXSTYLE, GetWindowLong(hwnd, GWL_EXSTYLE) | WS_EX_LAYERED);
+    SetLayeredWindowAttributes(hwnd, RGB(0, 0, 0), 255, LWA_ALPHA);
+
+    MARGINS margins = { -1 };
+    DwmExtendFrameIntoClientArea(hwnd, &margins);
 
     if (!CreateDeviceD3D(hwnd))
     {
@@ -58,10 +69,10 @@ int RenderUi()
 
     bool show_demo_window = true;
     bool show_another_window = false;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 0.00f);
 
-    bool done = false;
-    while (!done)
+    bool open = true;
+    while (open)
     {
         MSG msg;
         while (::PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE))
@@ -69,9 +80,9 @@ int RenderUi()
             ::TranslateMessage(&msg);
             ::DispatchMessage(&msg);
             if (msg.message == WM_QUIT)
-                done = true;
+                open = false;
         }
-        if (done)
+        if (!open)
             break;
 
         if (g_ResizeWidth != 0 && g_ResizeHeight != 0)
@@ -86,7 +97,7 @@ int RenderUi()
         ImGui_ImplWin32_NewFrame();
         ImGui::NewFrame();
 
-        ImGui::Begin("Another Window", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoTitleBar);
+        ImGui::Begin(GuiSettings::AppNameImGui, &open, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
         ImGui::SetWindowSize({ GuiSettings::WindowWidth, GuiSettings::WindowHeight });
         ImGui::SetWindowPos({ 0, 0 });
 
@@ -188,6 +199,17 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         if ((wParam & 0xfff0) == SC_KEYMENU)
             return 0;
         break;
+    case WM_NCHITTEST:
+    {
+        ImVec2 MousePos = ImGui::GetMousePos();
+        if (MousePos.y < 25 && MousePos.x < GuiSettings::WindowWidth - 25)
+        {
+            LRESULT hit = DefWindowProc(hWnd, msg, wParam, lParam);
+            // if (hit == HTCLIENT) hit = HTCAPTION;
+            return hit;
+        }
+        else break;
+    }
     case WM_DESTROY:
         ::PostQuitMessage(0);
         return 0;

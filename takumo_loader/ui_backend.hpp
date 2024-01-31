@@ -5,6 +5,7 @@
 #include <imgui_impl_dx11.h>
 #include <d3d11.h>
 #include <tchar.h>
+#include <dwmapi.h>
 
 int RenderUi();
 void ChangeWindowSize(int width, int height);

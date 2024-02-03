@@ -2,16 +2,16 @@
 
 namespace VarData
 {
-	extern int server = 0;
-	extern char CustomPath[255] = "";
-	extern char CustomServer[255] = "";
+	int server = 0;
+	char CustomPath[255] = "";
+	char CustomServer[255] = "";
 
-	extern int ActiveTheme = 0;
+	int ActiveTheme = 0;
 }
 
 namespace ConstData
 {
-	extern const char* servers[10]
+	const char* servers[10]
 	{
 		"Bancho (Patcher is not supported)",
 		"<3 Okayu",
@@ -24,7 +24,7 @@ namespace ConstData
 		"heia",
 		"custom"
 	};
-	extern const char* DevserverFlag[9]
+	const char* DevserverFlag[9]
 	{
 		"",
 		"okayu.pw",
@@ -37,7 +37,7 @@ namespace ConstData
 		"heia.kim"
 	};
 
-	extern const char* themes[2]
+	const char* themes[2]
 	{
 		"Dark purple",
 		"White purple"

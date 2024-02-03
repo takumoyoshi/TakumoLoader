@@ -2,6 +2,9 @@
 #include "ui.hpp"
 #include "globals.hpp"
 #include "userdata.hpp"
+#include "fonts.hpp"
+
+#define IMGUI_ENABLE_FREETYPE
 
 HWND hwnd;
 
@@ -10,11 +13,6 @@ static ID3D11DeviceContext*     g_pd3dDeviceContext = nullptr;
 static IDXGISwapChain*          g_pSwapChain = nullptr;
 static UINT                     g_ResizeWidth = 0, g_ResizeHeight = 0;
 static ID3D11RenderTargetView*  g_mainRenderTargetView = nullptr;
-
-bool drag = false;
-bool lmb_down = false;
-double last_mouse_clicked_x = 0.0f;
-double last_mouse_clicked_y = 0.0f;
 
 bool CreateDeviceD3D(HWND hWnd);
 void CleanupDeviceD3D();
@@ -56,11 +54,14 @@ int RenderUi()
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
     io.IniFilename = NULL;
     io.LogFilename = NULL;
+
+    fonts();
 
     ImGui::StyleColorsDark();
 
@@ -202,7 +203,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_NCHITTEST:
     {
         ImVec2 MousePos = ImGui::GetMousePos();
-        if (MousePos.y < 25 && MousePos.x < GuiSettings::WindowWidth - 25)
+        if (MousePos.y < 21 && MousePos.x < GuiSettings::WindowWidth - 25)
         {
             LRESULT hit = DefWindowProc(hWnd, msg, wParam, lParam);
             if (hit == HTCLIENT) hit = HTCAPTION;

@@ -18,6 +18,8 @@ namespace GuiSettings
 	extern std::string CurrentPage;
 
 	extern ImVec4 AccentColor;
+
+	extern ImVec2 ButtonSize;
 }
 
 namespace Pages {
@@ -30,4 +32,5 @@ namespace Themes {
 	void WhitePurple();
 }
 
+void fonts();
 void ui();

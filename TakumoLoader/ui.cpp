@@ -61,14 +61,14 @@ namespace Pages {
 			ImGui::Text("Takumo Loader is a tool that runs osu! with dev server.");
 
 			ImGui::PushItemWidth(GuiSettings::ButtonSize.x);
-			ImGui::Combo("", &VarData::server, ConstData::servers, 10, 3);
+			ImGui::Combo("", &VarData::server, ConstData::servers, 11, 3);
 			ImGui::PopItemWidth();
 
-			if (VarData::server != 9) ImGui::BeginDisabled();
+			if (VarData::server != ConstData::TotalServers) ImGui::BeginDisabled();
 			ImGui::PushItemWidth(398);
 			ImGui::InputTextWithHint("Custom server", "okayu.pw", VarData::CustomServer, sizeof(VarData::CustomServer));
 			ImGui::PopItemWidth();
-			if (VarData::server != 9) ImGui::EndDisabled();
+			if (VarData::server != ConstData::TotalServers) ImGui::EndDisabled();
 
 			if (VarData::server == 0) ImGui::BeginDisabled();
 			if (ImGui::Button("Play with patcher", GuiSettings::ButtonSize)) button::play(true);

@@ -11,6 +11,7 @@
 #include <string>
 #include <cstring>
 #include <windows.h>
+#include <fstream>
 
 namespace button
 {
@@ -22,7 +23,7 @@ namespace button
 		std::string LocalAppdata = getenv("Localappdata");
 
 		std::string DevserverFlag = "";
-		if (VarData::server != 9)
+		if (VarData::server != ConstData::TotalServers)
 		{
 			DevserverFlag = ConstData::DevserverFlag[VarData::server];
 		}
@@ -71,4 +72,11 @@ namespace button
 		SaveData();
 		exit(1);
 	}
+
+	void up_load()
+	{
+
+	}
 }
+
+// 142 149

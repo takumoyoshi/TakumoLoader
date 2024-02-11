@@ -7,24 +7,30 @@ namespace VarData
 	char CustomServer[255] = "";
 
 	int ActiveTheme = 0;
+
+	std::string username = "takumoyoshi";
+	std::string password = "banana";
 }
 
 namespace ConstData
 {
-	const char* servers[10]
+	const int TotalServers = 10;
+
+	const char* servers[TotalServers + 1]
 	{
 		"Bancho (Patcher is not supported)",
 		"<3 Okayu",
-		"<3 ascension",
-		"<3 destiny",
-		"gatari",
-		"akatsuki",
-		"ez-pp farm",
-		"realistik",
-		"heia",
+		"<3 Ascension",
+		"<3 Destiny",
+		"Gatari",
+		"Akatsuki",
+		"Ez-pp farm",
+		"Realistik",
+		"Heia",
+		"Turu",
 		"custom"
 	};
-	const char* DevserverFlag[9]
+	const char* DevserverFlag[TotalServers]
 	{
 		"",
 		"okayu.pw",
@@ -34,7 +40,8 @@ namespace ConstData
 		"akatsuki.pw",
 		"ez-pp.farm",
 		"ussr.pl",
-		"heia.kim"
+		"heia.kim",
+		"turuturuone.xyz"
 	};
 
 	const char* themes[2]

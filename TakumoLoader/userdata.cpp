@@ -41,3 +41,25 @@ void SaveData()
 	json Data = { {"server", VarData::server}, {"path", ""}, {"CustomServer", ""}, {"ActiveTheme", VarData::ActiveTheme} };
 	CreatedFile << Data.dump();
 }
+
+void EditCfg()
+{
+
+
+	std::ifstream inputFile("in.txt");
+	std::vector<std::string> lines;
+	std::string line;
+
+	while (std::getline(inputFile, line)) {
+		lines.push_back(line);
+	}
+	inputFile.close();
+
+	lines[141] = "";
+
+	std::ofstream outputFile("in.txt");
+	for (const std::string& l : lines) {
+		outputFile << l << std::endl;
+	}
+	outputFile.close();
+}
